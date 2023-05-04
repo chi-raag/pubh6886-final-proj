@@ -1,14 +1,18 @@
 source("R/train-test-split.R")
 
-l2_fit <- glmnet(X_train, Y_train, alpha = 1)
-l2_fit_tune <- data.frame(alpha = 1, lambda = l2_fit$lambda)
+nzv <- nearZeroVar(X_train)
+X_train <- X_train[, -nzv]
+
+l2_left_fit <- glmnet(X_train, Y_train_left, alpha = 1)
+l2_left_fit_tune <- data.frame(alpha = 1, lambda = l2_left_fit$lambda)
 
 set.seed(1234)
-l2_fit_cv <- train(
+l2_left_fit_cv <- train(
   x = X_train,
-  y = Y_train,
+  y = Y_train_left,
   method = "glmnet",
-  tuneGrid = l2_fit_tune,
+  tuneGrid = l2_left_fit_tune,
+  preProcess = c("center", "scale"),
   trControl = trainControl(
     method = "cv",
     number = 10,
@@ -16,9 +20,26 @@ l2_fit_cv <- train(
   )
 )
 
-l2_fit_cv
+l2_left_fit_cv
 
-Y_hat <- predict(l2_fit_cv$finalModel, X_test, s = l2_fit_cv$bestTune$lambda)
+l2_right_fit <- glmnet(X_train, Y_train_right, alpha = 1)
+l2_right_fit_tune <- data.frame(alpha = 1, lambda = l2_right_fit$lambda)
+
+set.seed(1234)
+l2_right_fit_cv <- train(
+  x = X_train,
+  y = Y_train_right,
+  method = "glmnet",
+  tuneGrid = l2_right_fit_tune,
+  preProcess = c("center", "scale"),
+  trControl = trainControl(
+    method = "cv",
+    number = 10,
+    selectionFunction = "best"
+  )
+)
+
+l2_right_fit_cv
 
 RMSE(Y_hat, Y_test)
 

@@ -18,12 +18,17 @@ X_train <- train_data |>
   select(-sample, -metabolite, -left_win, -right_win) |>
   as.matrix()
 
-Y_train <- train_data |>
+Y_train_left <- train_data |>
   pull(left_win)
+Y_train_right <- train_data |>
+  pull(right_win)
 
 X_test <- test_data |>
   select(-sample, -metabolite, -left_win, -right_win) |>
   as.matrix()
 
-Y_test <- test_data |>
+Y_test_left <- test_data |>
   pull(left_win)
+
+Y_test_right <- test_data |>
+  pull(right_win)
