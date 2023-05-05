@@ -3,15 +3,14 @@ source("R/train-test-split.R")
 library(caret)
 
 tune_grid <- expand.grid(
-  mstop = seq(500, 1000, by = 100),
-  prune = F
+  k = seq(1, 21, by = 2)
 )
 
 set.seed(1234)
-xg_left_fit <- train(
+knn_left_fit <- train(
   x = X_train,
   y = Y_train_left,
-  method = "gamboost",
+  method = "knn",
   tuneGrid = tune_grid,
   preProcess = c("center", "scale"),
   trControl = trainControl(
@@ -21,13 +20,13 @@ xg_left_fit <- train(
   )
 )
 
-xg_left_fit
+knn_left_fit
 
 set.seed(1234)
-xg_right_fit <- train(
+knn_right_fit <- train(
   x = X_train,
   y = Y_train_right,
-  method = "gamboost",
+  method = "knn",
   tuneGrid = tune_grid,
   preProcess = c("center", "scale"),
   trControl = trainControl(
@@ -37,4 +36,4 @@ xg_right_fit <- train(
   )
 )
 
-xg_right_fit
+knn_right_fit

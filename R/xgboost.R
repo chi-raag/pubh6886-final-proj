@@ -2,14 +2,11 @@ source("R/train-test-split.R")
 
 library(caret)
 
-nzv <- nearZeroVar(X_train)
-X_train_sub <- X_train[, -nzv]
-
 tune_grid <- expand.grid(
   nrounds = seq(100, 200, by = 50),
   eta = .3,
-  lambda = 0,
-  alpha = 1
+  lambda = c(0, .5),
+  alpha = c(.5, 1)
 )
 
 set.seed(1234)
@@ -18,6 +15,7 @@ xg_left_fit <- train(
   y = Y_train_left,
   method = "xgbLinear",
   tuneGrid = tune_grid,
+  preProcess = c("center", "scale"),
   trControl = trainControl(
     method = "CV",
     number = 10,

@@ -18,6 +18,9 @@ X_train <- train_data |>
   select(-sample, -metabolite, -left_win, -right_win) |>
   as.matrix()
 
+nzv <- nearZeroVar(X_train)
+X_train <- X_train[, -nzv]
+
 Y_train_left <- train_data |>
   pull(left_win)
 Y_train_right <- train_data |>
