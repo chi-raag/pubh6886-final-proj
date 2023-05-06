@@ -1,7 +1,7 @@
 source("R/train-test-split.R")
 
 tune_grid <- expand.grid(
-  mstop = seq(500, 1000, by = 100),
+  mstop = seq(100, 500, by = 100),
   prune = F
 )
 

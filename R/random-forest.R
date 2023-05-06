@@ -1,9 +1,9 @@
 source("R/train-test-split.R")
 
 tune_grid <- expand.grid(
-  mtry = c(floor(log2(ncol(X))),
-           floor(sqrt(ncol(X))),
-           floor(ncol(X) / 3)),
+  mtry = c(floor(sqrt(ncol(X))),
+           floor(ncol(X) / 3),
+           floor(ncol(X) / 2)),
   splitrule = "variance",
   min.node.size = 5
 )

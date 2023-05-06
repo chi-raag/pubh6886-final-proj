@@ -1,19 +1,20 @@
 source("R/train-test-split.R")
 
-library(caret)
-
 tune_grid <- expand.grid(
   nrounds = 100,
-  eta = .5,
-  lambda = 0,
-  alpha = c(0, .5, 1)
+  eta = 0.5,
+  max_depth = c(2, 4, 6, 8, 10),
+  colsample_bytree = 1,
+  subsample = 1,
+  gamma = 0,
+  min_child_weight = 1
 )
 
 set.seed(1234)
 xg_left_fit <- train(
-  x = X_train,
-  y = Y_train_left,
-  method = "xgbLinear",
+  x = X,
+  y = Y_left,
+  method = "xgbTree",
   tuneGrid = tune_grid,
   preProcess = c("center", "scale"),
   trControl = trainControl(
